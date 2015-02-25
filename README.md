@@ -9,4 +9,4 @@ There are currently some limitations:
 - No input support
 - Some texture wrapping issues with 3D documents
 
-This will be improved as time goes on
+This will be improved as time goes on.
