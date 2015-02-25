@@ -2,7 +2,9 @@
 
 A derivitive of [Mike's libRocket-Urho3D port](https://github.com/realrunner/urho3d-librocket).
 
-This is incomplete. A sample is included via the HelloWorld class.
+This is incomplete. A sample is included, and can be run by calling the following:
+
+    Root::instance()->Run();
 
 There are currently some limitations:
 - Can only create one 3D document at a time
