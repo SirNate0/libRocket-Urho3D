@@ -3,31 +3,31 @@
 #include "RocketDocument3D.h"
 #include "SystemInterface.h"
 
-#include "Camera.h"
-#include "Context.h"
-#include "CoreEvents.h"
-#include "Engine.h"
-#include "Font.h"
-#include "Input.h"
-#include "Light.h"
-#include "Material.h"
-#include "Model.h"
-#include "Octree.h"
-#include "ProcessUtils.h"
-#include "Renderer.h"
-#include "ResourceCache.h"
-#include "Scene.h"
-#include "StaticModel.h"
-#include "Text.h"
-#include "UI.h"
-#include "Main.h"
-#include "DebugNew.h"
-#include "Graphics.h"
-#include "GraphicsEvents.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Viewport.h"
-#include "RenderPath.h"
+#include <Graphics/Camera.h>
+#include <Core/Context.h>
+#include <Core/CoreEvents.h>
+#include <Engine/Engine.h>
+#include <UI/Font.h>
+#include <Input/Input.h>
+#include <Graphics/Light.h>
+#include <Graphics/Material.h>
+#include <Graphics/Model.h>
+#include <Graphics/Octree.h>
+#include <Core/ProcessUtils.h>
+#include <Graphics/Renderer.h>
+#include <Resource/ResourceCache.h>
+#include <Scene/Scene.h>
+#include <Graphics/StaticModel.h>
+#include <UI/Text.h>
+#include <UI/UI.h>
+#include <Core/Main.h>
+#include <DebugNew.h>
+#include <Graphics/Graphics.h>
+#include <Graphics/GraphicsEvents.h>
+#include <Graphics/VertexBuffer.h>
+#include <Graphics/IndexBuffer.h>
+#include <Graphics/Viewport.h>
+#include <Graphics/RenderPath.h>
 HelloWorld::HelloWorld(Urho3D::Context* context) :
 Object(context),
 rocketContext()
@@ -80,7 +80,7 @@ void HelloWorld::Start()
 	// This will orient the node to "billboard" the document
 	node->SetWorldRotation(camera->GetFaceCameraRotation(node->GetPosition(), node->GetRotation(), Urho3D::FC_ROTATE_XYZ));
 	//node->SetRotation(Urho3D::Quaternion(30.0f, -60.f, 0.0f));
-	node->CreateComponent<Urho3D::Rocket::RocketDocument3D>();
+	node->CreateComponent<Urho3D::Rocket::RocketDocument2D>();
 	//node->LookAt(cameraNode->GetPosition());
 	//Right
 	//node = helloScene_->CreateChild();
@@ -93,6 +93,7 @@ void HelloWorld::Start()
 
 void HelloWorld::Stop()
 {
+	helloScene_->Clear(true,true);
 	Rocket::Core::Shutdown();
 }
 
@@ -109,7 +110,8 @@ void HelloWorld::SubscribeToEvents()
 
 void HelloWorld::HandleUpdate(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData)
 {
-	//float timeStep = eventData[Update::P_TIMESTEP].GetFloat();        
+	//float timeStep = eventData[Update::P_TIMESTEP].GetFloat();
+
 
 }
 

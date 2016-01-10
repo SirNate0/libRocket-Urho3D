@@ -1,7 +1,7 @@
 #include "SystemInterface.h"
 
-#include "Context.h"
-#include "Timer.h"
+#include <Core/Context.h>
+#include <Core/Timer.h>
 
 namespace Urho3D
 {

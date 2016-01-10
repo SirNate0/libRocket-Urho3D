@@ -2,7 +2,7 @@
 #define _ROCKET_SYSTEMINTERFACE_H
 
 #include <Rocket/Core/SystemInterface.h>
-#include "Context.h"
+#include <Core/Context.h>
 
 /**
 	A custom system interface for Rocket. This provides timing information.
@@ -16,7 +16,7 @@ namespace Urho3D
 		{
 			class SystemInterface : public Urho3D::Object, public ::Rocket::Core::SystemInterface
 			{
-				OBJECT(RenderInterface);
+				OBJECT(SystemInterface, Urho3D::Object);
 
 			public:
 				SystemInterface(Urho3D::Context* context) :

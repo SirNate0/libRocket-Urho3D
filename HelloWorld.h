@@ -2,14 +2,15 @@
 #define _HELLOWORLD_H
 
 
-#include <Rocket/Core.h>
+#include <Rocket/Core/Context.h>
+#include <Rocket/Core/Core.h>
 #include <Rocket/Controls.h>
-#include "Object.h"
-#include "Scene.h"
+#include <Core/Object.h>
+#include <Scene/Scene.h>
 
 class HelloWorld : public Urho3D::Object
 {
-	OBJECT(HelloWorld);
+	OBJECT(HelloWorld, Urho3D::Object);
 
 	Rocket::Core::Context* rocketContext;
 	

@@ -2,14 +2,14 @@
 #define _ROCKET_RENDERINTERFACE_H
 
 #include <vector>
-#include "Rocket/Core/RenderInterface.h"
-#include "Texture2D.h"
-#include "Rect.h"
-#include "Context.h"
-#include "Object.h"
-#include "ShaderVariation.h"
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
+#include <Rocket/Core/RenderInterface.h>
+#include <Graphics/Texture2D.h>
+#include <Math/Rect.h>
+#include <Core/Context.h>
+#include <Core/Object.h>
+#include <Graphics/ShaderVariation.h>
+#include <Graphics/IndexBuffer.h>
+#include <Graphics/VertexBuffer.h>
 
 namespace Urho3D
 {
@@ -26,7 +26,7 @@ namespace Urho3D
 
 			class RenderInterface : public Urho3D::Object, public ::Rocket::Core::RenderInterface
 			{
-				OBJECT(RenderInterface);
+				OBJECT(RenderInterface, Urho3D::Object);
 			public:
 				RenderInterface(Urho3D::Context* context);
 				~RenderInterface();

@@ -1,6 +1,6 @@
 #include "RocketDocument.h"
 
-#include "Context.h"
+#include <Core/Context.h>
 
 namespace Urho3D
 {

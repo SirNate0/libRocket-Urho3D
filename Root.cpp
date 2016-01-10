@@ -6,12 +6,13 @@
 #include "RocketDocument.h"
 #include "RocketDocument2D.h"
 #include "RocketDocument3D.h"
+#include "RocketEventListener.h"
 
-#include "Input.h"
-#include "Context.h"
-#include "Engine.h"
-#include "Graphics.h"
-#include "ResourceCache.h"
+#include <Input/Input.h>
+#include <Core/Context.h>
+#include <Engine/Engine.h>
+#include <Graphics/Graphics.h>
+#include <Resource/ResourceCache.h>
 
 Root Root::g_instance;
 bool  Root::g_initialized;
@@ -53,7 +54,7 @@ bool  Root::g_initialized;
         return;
     }
 	_context->GetSubsystem<Urho3D::Input>()->SetMouseVisible(true);
-	_context->GetSubsystem<Urho3D::ResourceCache>()->AddResourceDir("GameData");
+//	_context->GetSubsystem<Urho3D::ResourceCache>()->AddResourceDir("GameData");
 
 	Urho3D::Rocket::Core::RenderInterface::RegisterObject(_context);
 	Urho3D::Rocket::Core::SystemInterface::RegisterObject(_context);
@@ -67,6 +68,7 @@ bool  Root::g_initialized;
 
 	Rocket::Core::Initialise();
 	Rocket::Controls::Initialise();
+	RocketEventListenerInstancer::Register(_context);
 
 	Urho3D::SharedPtr<HelloWorld> helloWorld(new HelloWorld(_context));
 	helloWorld->Start();
@@ -79,4 +81,9 @@ bool  Root::g_initialized;
 	}
 
 	helloWorld->Stop();
+ }
+
+ int main()
+ {
+	 Root::instance()->Run();
  }

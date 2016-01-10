@@ -4,11 +4,13 @@
 #pragma once
 
 #include <memory>
-#include <Rocket\Core\Context.h>
+#include <Rocket/Core/Context.h>
 #include "RenderInterface.h"
 #include "SystemInterface.h"
 
-#include "Component.h"
+#include <Scene/Component.h>
+
+#include "RocketInput.h"
 
 namespace Urho3D
 {
@@ -16,7 +18,7 @@ namespace Urho3D
 	{
 		class RocketDocument2D : public Urho3D::Component, public ::Rocket::Core::RenderInterface
 		{
-			OBJECT(RocketDocument2D);
+			OBJECT(RocketDocument2D, Urho3D::Component);
 		public:
 			RocketDocument2D(Urho3D::Context* context);
 			~RocketDocument2D();
@@ -62,7 +64,9 @@ namespace Urho3D
 			void HandlePostRender(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
 		private:
-			std::vector<Texture2D*> textures;
+			std::vector<SharedPtr<Texture2D>> textures;
+//			std::vector<Texture2D*> textures;
+//			Vector<Texture2D*> textures;
 			IntRect scissors;
 
 			SharedPtr<ShaderVariation> noTextureVS;
@@ -71,6 +75,7 @@ namespace Urho3D
 			SharedPtr<ShaderVariation> diffTexturePS;
 
 			std::shared_ptr<::Rocket::Core::Context> _rocketContext;
+			SharedPtr<RocketInput> input;
 		};
 	}
 }

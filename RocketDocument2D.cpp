@@ -1,12 +1,12 @@
 #include "RocketDocument2D.h"
 
-#include <Rocket\Core.h>
-#include "Context.h"
-#include "CoreEvents.h"
-#include "Graphics.h"
-#include "GraphicsEvents.h"
-#include "Node.h"
-#include "ResourceCache.h"
+#include <Rocket/Core.h>
+#include <Core/Context.h>
+#include <Core/CoreEvents.h>
+#include <Graphics/Graphics.h>
+#include <Graphics/GraphicsEvents.h>
+#include <Scene/Node.h>
+#include <Resource/ResourceCache.h>
 
 namespace Urho3D
 {
@@ -27,6 +27,7 @@ namespace Urho3D
 				::Rocket::Core::CreateContext("main", 
 				::Rocket::Core::Vector2i(graphics->GetWidth(), graphics->GetHeight()), 
 				this));
+			input = new RocketInput(Urho3D::Object::GetContext(), _rocketContext.get());
 
 			::Rocket::Core::FontDatabase::LoadFontFace("Data/Fonts/Delicious-Bold.otf");
 			::Rocket::Core::FontDatabase::LoadFontFace("Data/Fonts/Delicious-BoldItalic.otf");
@@ -107,7 +108,7 @@ namespace Urho3D
 
 			iBuff->Unlock();
 
-			Texture2D* tex = texture ? textures.at(texture - 1) : NULL;
+			Texture2D* tex = texture ? textures.at(texture - 1).Get() : nullptr;
 
 			Core::Urho3DCompiledGeometry* geom = new Core::Urho3DCompiledGeometry();
 			geom->iBuff = iBuff;
@@ -171,7 +172,8 @@ namespace Urho3D
 
 			//Pass shader params
 			graphics->SetShaders(vs, ps);
-			if (graphics->NeedParameterUpdate(SP_OBJECTTRANSFORM, this))
+//			if (graphics->NeedParameterUpdate(SP_OBJECTTRANSFORM, this))
+				if (graphics->NeedParameterUpdate(SP_OBJECT, this))
 				graphics->SetShaderParameter(VSP_MODEL, trans);
 			if (graphics->NeedParameterUpdate(SP_CAMERA, this))
 				graphics->SetShaderParameter(VSP_VIEWPROJ, projection);
@@ -186,8 +188,15 @@ namespace Urho3D
 		void RocketDocument2D::ReleaseCompiledGeometry(::Rocket::Core::CompiledGeometryHandle geometry)
 		{
 			Core::Urho3DCompiledGeometry* geom = (Core::Urho3DCompiledGeometry*)geometry;
-			delete geom->iBuff;
-			delete geom->vBuff;
+			Urho3D::Graphics* graphics = GetSubsystem<Urho3D::Graphics>();
+			graphics->SetVertexBuffer(0);
+			graphics->SetIndexBuffer(0);
+//			delete geom->iBuff;
+//			delete geom->vBuff;
+			geom->iBuff.Reset();
+			geom->vBuff.Reset();
+			graphics->SetVertexBuffer(0);
+			graphics->SetIndexBuffer(0);
 			delete geom;
 		}
 
@@ -220,7 +229,7 @@ namespace Urho3D
 				texture_dimensions.y = tex->GetHeight();
 			}
 
-			textures.push_back(tex);
+			textures.push_back(SharedPtr<Texture2D>(tex));
 			texture_handle = (::Rocket::Core::TextureHandle)textures.size();   // indexing from 1, 0 means no texture
 
 			return true;
@@ -235,7 +244,7 @@ namespace Urho3D
 			Texture2D* tex = new Texture2D(context_);
 			tex->SetData(img);
 
-			textures.push_back(tex);
+			textures.push_back(SharedPtr<Texture2D>(tex));
 			texture_handle = (::Rocket::Core::TextureHandle)textures.size();		// indexing from 1, 0 means no texture
 
 			return true;
@@ -244,9 +253,7 @@ namespace Urho3D
 		// Called by Rocket when a loaded texture is no longer required.		
 		void RocketDocument2D::ReleaseTexture(::Rocket::Core::TextureHandle texture_handle)
 		{
-			Texture2D *tex = textures.at(texture_handle - 1);
-			delete tex;
-			tex = NULL;
+			textures.at(texture_handle - 1).Reset();
 		}
 
 		float RocketDocument2D::GetHorizontalTexelOffset()

@@ -2,17 +2,17 @@
 #include <Rocket/Core.h>
 
 #include <list>
-#include "Texture.h"
-#include "Rect.h"
-#include "Context.h"
-#include "Vector3.h"
-#include "Material.h"
-#include "ResourceCache.h"
-#include "Graphics.h"
-#include "Renderer.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Color.h"
+#include <Graphics/Texture.h>
+#include <Math/Rect.h>
+#include <Core/Context.h>
+#include <Math/Vector3.h>
+#include <Graphics/Material.h>
+#include <Resource/ResourceCache.h>
+#include <Graphics/Graphics.h>
+#include <Graphics/Renderer.h>
+#include <Graphics/VertexBuffer.h>
+#include <Graphics/IndexBuffer.h>
+#include <Math/Color.h>
 
 namespace Urho3D
 {
@@ -156,7 +156,8 @@ namespace Urho3D
 
 				//Pass shader params
 				graphics->SetShaders(vs, ps);
-				if (graphics->NeedParameterUpdate(SP_OBJECTTRANSFORM, this))
+//				if (graphics->NeedParameterUpdate(SP_OBJECTTRANSFORM, this))
+					if (graphics->NeedParameterUpdate(SP_OBJECT, this))
 					graphics->SetShaderParameter(VSP_MODEL, trans);
 				if (graphics->NeedParameterUpdate(SP_CAMERA, this))
 					graphics->SetShaderParameter(VSP_VIEWPROJ, projection);

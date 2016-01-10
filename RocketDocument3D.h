@@ -4,11 +4,12 @@
 #pragma once
 
 #include <memory>
-#include <Rocket\Core\Context.h>
+#include <Core/Context.h>
 #include "RenderInterface.h"
 #include "SystemInterface.h"
 
-#include "Drawable.h"
+#include <Graphics/Drawable.h>
+#include "RocketInput.h"
 
 namespace Urho3D
 {
@@ -38,7 +39,7 @@ namespace Urho3D
 
 		class RocketDocument3D : public Urho3D::Drawable, public ::Rocket::Core::RenderInterface
 		{
-			OBJECT(RocketDocument3D);
+			OBJECT(RocketDocument3D, Urho3D::Drawable);
 		public:
 			RocketDocument3D(Urho3D::Context* context);
 			~RocketDocument3D();
@@ -84,6 +85,7 @@ namespace Urho3D
 
 			void RecalculateBatch(RocketBatchInfo& batchInfo);
 
+			void HandleInput(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 			void HandleUpdate(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 			void HandlePostRender(Urho3D::StringHash eventType, Urho3D::VariantMap& eventData);
 
@@ -98,6 +100,8 @@ namespace Urho3D
 			SharedPtr<ShaderVariation> diffTexturePS;
 
 			std::shared_ptr<::Rocket::Core::Context> _rocketContext;
+			SharedPtr<RocketInput> input;
+//			::Rocket::Core::Context* _rocketContext;
 		};
 	}
 }
