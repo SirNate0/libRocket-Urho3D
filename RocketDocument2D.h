@@ -68,6 +68,7 @@ namespace Urho3D
 //			std::vector<Texture2D*> textures;
 //			Vector<Texture2D*> textures;
 			IntRect scissors;
+			bool scissor;
 
 			SharedPtr<ShaderVariation> noTextureVS;
 			SharedPtr<ShaderVariation> noTexturePS;

@@ -55,8 +55,8 @@ WidgetTextInput::WidgetTextInput(ElementFormControl* _parent) : internal_dimensi
 	parent->AddEventListener("mousedown", this, true);
 	parent->AddEventListener("drag", this, true);
 
-	text_element = dynamic_cast< Core::ElementText* >(Core::Factory::InstanceElement(parent, "#text", "#text", Rocket::Core::XMLAttributes()));
-	selected_text_element = dynamic_cast< Core::ElementText* >(Core::Factory::InstanceElement(parent, "#text", "#text", Rocket::Core::XMLAttributes()));
+        text_element = dynamic_cast< Core::ElementText* >(Core::Factory::InstanceElement(parent, "#text", "text", Rocket::Core::XMLAttributes()));
+        selected_text_element = dynamic_cast< Core::ElementText* >(Core::Factory::InstanceElement(parent, "#text", "text", Rocket::Core::XMLAttributes()));
 	if (text_element != NULL)
 	{
 		text_element->SuppressAutoLayout();

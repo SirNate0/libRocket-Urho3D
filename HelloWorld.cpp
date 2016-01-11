@@ -28,6 +28,7 @@
 #include <Graphics/IndexBuffer.h>
 #include <Graphics/Viewport.h>
 #include <Graphics/RenderPath.h>
+#include <Graphics/Zone.h>
 HelloWorld::HelloWorld(Urho3D::Context* context) :
 Object(context),
 rocketContext()
@@ -81,6 +82,17 @@ void HelloWorld::Start()
 	node->SetWorldRotation(camera->GetFaceCameraRotation(node->GetPosition(), node->GetRotation(), Urho3D::FC_ROTATE_XYZ));
 	//node->SetRotation(Urho3D::Quaternion(30.0f, -60.f, 0.0f));
 	node->CreateComponent<Urho3D::Rocket::RocketDocument2D>();
+
+
+	Urho3D::Node* zoneNode = helloScene_->CreateChild("Zone");
+	Urho3D::Zone* zone = zoneNode->CreateComponent<Urho3D::Zone>();
+	zone->SetBoundingBox(Urho3D::BoundingBox(-10000.0f, 10000.0f));
+	zone->SetAmbientColor(Urho3D::Color(0.35f, 0.35f, 0.25f));
+	zone->SetFogColor(Urho3D::Color(0.5f, 0.6f, 0.7f));
+	zone->SetFogStart(100.0f);
+//	zone->SetFogEnd(300.0f);
+	zone->SetFogEnd(3000.0f);
+
 	//node->LookAt(cameraNode->GetPosition());
 	//Right
 	//node = helloScene_->CreateChild();

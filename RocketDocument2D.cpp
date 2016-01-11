@@ -1,5 +1,7 @@
 #include "RocketDocument2D.h"
 
+
+#include <Urho3D.h>
 #include <Rocket/Core.h>
 #include <Core/Context.h>
 #include <Core/CoreEvents.h>
@@ -7,7 +9,8 @@
 #include <Graphics/GraphicsEvents.h>
 #include <Scene/Node.h>
 #include <Resource/ResourceCache.h>
-
+#include <IO/Log.h>
+#include <Rocket/Debugger.h>
 namespace Urho3D
 {
 	namespace Rocket
@@ -23,9 +26,15 @@ namespace Urho3D
 			diffTextureVS = graphics->GetShader(Urho3D::VS, "Basic", "DIFFMAP VERTEXCOLOR");
 			diffTexturePS = graphics->GetShader(Urho3D::PS, "Basic", "DIFFMAP VERTEXCOLOR");
 
+//			noTextureVS = graphics->GetShader(Urho3D::VS, "UI", "VERTEXCOLOR");
+//			noTexturePS = graphics->GetShader(Urho3D::PS, "UI", "VERTEXCOLOR");
+//
+//			diffTextureVS = graphics->GetShader(Urho3D::VS, "UI", "DIFFMAP VERTEXCOLOR");
+//			diffTexturePS = graphics->GetShader(Urho3D::PS, "UI", "DIFFMAP VERTEXCOLOR");
+
 			_rocketContext = std::shared_ptr<::Rocket::Core::Context>(
 				::Rocket::Core::CreateContext("main", 
-				::Rocket::Core::Vector2i(graphics->GetWidth(), graphics->GetHeight()), 
+				::Rocket::Core::Vector2i(graphics->GetWidth(), graphics->GetHeight()),
 				this));
 			input = new RocketInput(Urho3D::Object::GetContext(), _rocketContext.get());
 
@@ -33,6 +42,7 @@ namespace Urho3D
 			::Rocket::Core::FontDatabase::LoadFontFace("Data/Fonts/Delicious-BoldItalic.otf");
 			::Rocket::Core::FontDatabase::LoadFontFace("Data/Fonts/Delicious-Italic.otf");
 			::Rocket::Core::FontDatabase::LoadFontFace("Data/Fonts/Delicious-Roman.otf");
+			::Rocket::Core::FontDatabase::LoadFontFace("Data/UI/AlegreyaSans-Regular.otf");
 
 			::Rocket::Core::ElementDocument *Document = _rocketContext->LoadDocument("Data/UI/rocketDemo.html");
 
@@ -41,9 +51,11 @@ namespace Urho3D
 				Document->Show();
 				//Document->RemoveReference();
 			};
-
 			SubscribeToEvent(Urho3D::E_UPDATE, HANDLER(RocketDocument2D, HandleUpdate));
 			SubscribeToEvent(Urho3D::E_ENDRENDERING, HANDLER(RocketDocument2D, HandlePostRender));
+
+			::Rocket::Debugger::Initialise(_rocketContext.get());
+			::Rocket::Debugger::SetVisible(true);
 		}
 
 		RocketDocument2D::~RocketDocument2D()
@@ -147,6 +159,7 @@ namespace Urho3D
 			graphics->SetStencilTest(false);
 			graphics->ResetRenderTargets();
 			graphics->SetBlendMode(BLEND_ALPHA);
+//			graphics->SetColorWrite(true);
 
 			//Bind buffers
 			graphics->SetVertexBuffer(geom->vBuff);
@@ -180,6 +193,9 @@ namespace Urho3D
 			if (graphics->NeedParameterUpdate(SP_MATERIAL, this))
 				graphics->SetShaderParameter(PSP_MATDIFFCOLOR, Color(1.0f, 1.0f, 1.0f, 1.0f));
 
+			if (scissor)
+				graphics->SetScissorTest(true, scissors);
+
 			//Draw indexed geometry
 			graphics->Draw(TRIANGLE_LIST, 0, geom->iBuff->GetIndexCount(), 0, geom->vBuff->GetVertexCount());
 		}
@@ -203,21 +219,25 @@ namespace Urho3D
 		// Called by Rocket when it wants to enable or disable scissoring to clip content.		
 		void RocketDocument2D::EnableScissorRegion(bool enable)
 		{
-			Urho3D::Graphics* graphics = GetSubsystem<Urho3D::Graphics>();
-
-			if (enable)
-				graphics->SetScissorTest(true, scissors);
-			else
-				graphics->SetScissorTest(false);
+//			Urho3D::Graphics* graphics = GetSubsystem<Urho3D::Graphics>();
+//			if (enable)
+//				graphics->SetScissorTest(true, scissors);
+//			else
+//				graphics->SetScissorTest(false);
+			scissor = enable;
 		}
 
 		// Called by Rocket when it wants to change the scissor region.		
 		void RocketDocument2D::SetScissorRegion(int x, int y, int width, int height)
 		{
+//			width /= 2;
+//			height /= 2;
 			scissors.left_ = x;
 			scissors.top_ = y;
-			scissors.bottom_ = height;
-			scissors.right_ = width;
+			scissors.bottom_ = y + height;
+			scissors.right_ = x + width;
+//			Urho3D::Graphics* graphics = GetSubsystem<Urho3D::Graphics>();
+//			graphics->SetScissorTest(true, scissors);
 		}
 
 		// Called by Rocket when a texture is required by the library.		

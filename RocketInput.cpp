@@ -44,8 +44,8 @@ RocketInput::~RocketInput()
 		return KeyIdentifier(SDL_keycode - SDLK_0 + KI_0);
 	if (SDL_keycode >= SDLK_a && SDL_keycode <= SDLK_z)
 		return KeyIdentifier(SDL_keycode - SDLK_a + KI_A);
-	if (SDL_keycode >= SDLK_F1 && SDL_keycode <= SDLK_F24)
-		return KeyIdentifier(SDL_keycode - SDLK_1 + KI_1);
+//	if (SDL_keycode >= SDLK_F1 && SDL_keycode <= SDLK_F24)
+//		return KeyIdentifier(SDL_keycode - SDLK_F1 + KI_F1);
 	if (SDL_keycode == SDLK_SPACE)
 		return KI_SPACE;
 	if (SDL_keycode == SDLK_UNKNOWN)
@@ -116,7 +116,11 @@ void RocketInput::HandleInput(Urho3D::StringHash eventType, Urho3D::VariantMap& 
 	if (eventType == E_KEYUP)
 		_rocketContext->ProcessKeyUp(GetKey(eventData[KeyUp::P_KEY].GetInt()), mod);
 	else if (eventType == E_KEYDOWN)
-		_rocketContext->ProcessKeyDown(GetKey(eventData[KeyUp::P_KEY].GetInt()), mod);
+	{
+		_rocketContext->ProcessKeyDown(GetKey(eventData[KeyDown::P_KEY].GetInt()), mod);
+		if (eventData[KeyDown::P_KEY].GetInt() == SDLK_RETURN || eventData[KeyDown::P_KEY].GetInt() == SDLK_KP_ENTER)
+			_rocketContext->ProcessTextInput("\n");
+	}
 	else if (eventType == E_TEXTINPUT)
 		_rocketContext->ProcessTextInput(eventData[TextInput::P_TEXT].GetString().CString());
 	else if (eventType == E_MOUSEMOVE)
